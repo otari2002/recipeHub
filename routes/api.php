@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\EnsureUserLoggedIn;
 
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\LoginController;
@@ -39,37 +39,27 @@ Route::post('reset-password/confirm-otp', [ResetPasswordController::class, 'conf
 // Verify the code and reset (code, email, password, password_confirmation)
 Route::post('reset-password', [ResetPasswordController::class, 'resetPassword']);
 
+Route::get('random-recipes', [RecipeController::class, 'getRandomRecipes']);
 // Group of routes only available to logged in users
 Route::middleware([EnsureUserLoggedIn::class])->group(function () {
-
     // Logout
     Route::get('logout', [LoginController::class, 'logout']);
     // User Token Refresh
     Route::get('refresh', [LoginController::class, 'refresh']);
 
-    // Invite Via Email
-    Route::post("invite-contact", [UserController::class, "inviteContact"]);
-
     // Email Adress Verification
     Route::get('email/send', [EmailVerificationController::class, 'sendOTP']);
     Route::post('email/verify', [EmailVerificationController::class, 'verify']); //(code)
 
-    // Create a post (idRestaurant, postText, rating, pictures? = file[])
-    Route::post('posts/create', [PostController::class, 'createPost']);
-    // Delete a post created by user (idPost)
-    Route::post('posts/delete', [PostController::class, 'deletePost']);
-    // Save/Unsave post (idPost)
-    Route::post('posts/save', [PostController::class, 'savePost']);
+    Route::post('posts/save', [RecipeController::class, 'savePost']);
     // Remove a post from saved posts (idPost)
-    // Route::post('posts/unsave', [PostController::class, 'unsavePost']);
+    Route::post('posts/unsave', [RecipeController::class, 'unsavePost']);
     // Like a post (idPost)
-    Route::post('posts/like', [PostController::class, 'likePost']);
+    Route::post('posts/like', [RecipeController::class, 'likePost']);
     // Get Post with its ID
-    Route::post('post', [PostController::class, 'getPost']);
+    Route::post('post', [RecipeController::class, 'getPost']);
     // Remove Like from a post (idPost)
-    // Route::post('posts/unlike', [PostController::class, 'unlikePost']);
-    // Share a post (idPost)
-    Route::post('posts/share', [PostController::class, 'sharePost']);
+    // Route::post('posts/unlike', [RecipeController::class, 'unlikePost']);
 
     // Create a comment (idPost, idParent?, commentText)
     Route::post('comments/create', [CommentController::class, 'createComment']);

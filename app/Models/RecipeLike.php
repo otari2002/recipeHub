@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Thiagoprz\CompositeKey\HasCompositeKey;
 
-class PostLike extends Model
+class RecipeLike extends Model
 {
     use HasFactory, HasCompositeKey;
     protected $primaryKey = ['idUser', 'idPost'];

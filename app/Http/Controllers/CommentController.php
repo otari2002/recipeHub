@@ -14,10 +14,10 @@ class CommentController extends Controller
     {
         $user = Auth::user();
 
-        $formFields = $request->only(['idPost', 'commentText']);
+        $formFields = $request->only(['idRecipe', 'commentText']);
         // Validate the data sent in the body of the request
         $validator = Validator::make($formFields, [
-            'idPost' => ['required', 'numeric'],
+            'idRecipe' => ['required', 'numeric'],
             'commentText' => 'required'
         ]);
         if ($validator->fails()) {
@@ -29,7 +29,7 @@ class CommentController extends Controller
         }
         $comment = new Comment();
         $comment->idUser = $user->idUser;
-        $comment->idPost = $formFields['idPost'];
+        $comment->idRecipe = $formFields['idRecipe'];
         $comment->commentText = $formFields['commentText'];
         $comment->save();
 

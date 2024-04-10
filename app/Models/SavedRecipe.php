@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use Thiagoprz\CompositeKey\HasCompositeKey;
 
-class SavedPost extends Model
+class SavedRecipe extends Model
 {
     use HasFactory, HasCompositeKey;
     protected $primaryKey = ['idPost', 'idUser'];

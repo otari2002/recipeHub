@@ -10,7 +10,8 @@
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.9",
-        "php-open-source-saver/jwt-auth": "^2.2"
+        "php-open-source-saver/jwt-auth": "^2.2",
+        "thiagoprz/eloquent-composite-key": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -26,7 +27,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "classmap": [
+            "app/Helpers" 
+        ]
     },
     "autoload-dev": {
         "psr-4": {

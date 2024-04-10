@@ -17,7 +17,6 @@ return new class extends Migration
             $table->unsignedBigInteger('idUser');
             $table->string('commentText', 254)->nullable();
             $table->timestamps();
-            $table->foreign('idRecipe')->references('idRecipe')->on('recipes')->onDelete('cascade');
             $table->foreign('idUser')->references('idUser')->on('users')->onDelete('cascade');
         });
     }
