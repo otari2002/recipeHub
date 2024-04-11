@@ -16,12 +16,14 @@ class RecipeController extends Controller
         return RecipeAPI::getRecipe($id);
     }
     public function getRandomRecipes(){
-        return RecipeAPI::randomRecipes(1);
+        return RecipeAPI::randomRecipes(10);
     }
-    public function savePost(Request $request)
+    public function getSimilarRecipes($id){
+        return RecipeAPI::similarRecipes(10,$id);
+    }
+    public function saveRecipe(Request $request)
     {
         $user = Auth::user();
-
         $formFields = $request->only('idRecipe');
         // Validate the data sent in the body of the request
         $validator = Validator::make($formFields, ['idRecipe' => ['required', 'numeric']]);
@@ -35,12 +37,12 @@ class RecipeController extends Controller
 
         $recipeSaved = SavedRecipe::where(['idRecipe' => $idRecipe, 'idUser' => $user->idUser])->first();
 
-        // Check if post was already saved
+        // Check if recipe was already saved
         if ($recipeSaved) {
-            return $this->unsavePost($request);
+            return $this->unsaveRecipe($request);
         }
 
-        // Create a record for saved post
+        // Create a record for saved recipe
         $recipeToSave = new SavedRecipe();
         $recipeToSave->idRecipe = $idRecipe;
         $recipeToSave->idUser = $user->idUser;
@@ -48,12 +50,12 @@ class RecipeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Post saved successfully',
+            'message' => 'Recipe saved successfully',
             'saved' => true
         ]);
     }
 
-    public function unsavePost(Request $request)
+    public function unsaveRecipe(Request $request)
     {
         $user = Auth::user();
 
@@ -70,23 +72,23 @@ class RecipeController extends Controller
 
         $savedRecipe = SavedRecipe::where(['idRecipe' => $idRecipe, 'idUser' => $user->idUser])->first();
 
-        // Check if post was saved by the user and delete it the save record
+        // Check if recipe was saved by the user and delete it the save record
         if ($savedRecipe) {
             $savedRecipe->delete();
             return response()->json([
                 'status' => 'success',
-                'message' => "Post removed from Saved Posts",
+                'message' => "Recipe removed from Saved Recipes",
                 'saved' => false
             ]);
         } else {
             return response()->json([
                 'status' => 'error',
-                'message' => "User didn't save this post"
+                'message' => "User didn't save this recipe"
             ]);
         }
     }
 
-    public function likePost(Request $request)
+    public function likeRecipe(Request $request)
     {
         $user = Auth::user();
 
@@ -102,18 +104,18 @@ class RecipeController extends Controller
         $idRecipe = $formFields['idRecipe'];
         $likeExists = RecipeLike::where(["idRecipe" => $idRecipe, "idUser" => $user->idUser])->get()->first();
         
-        // Check if post was already liked by the user
+        // Check if recipe was already liked by the user
         if ($likeExists) {
                if ($likeExists->delete()) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Post unliked succefully',
+                    'message' => 'Recipe unliked succefully',
                     'like' => false
                 ]);
             }
         }
 
-        // Create a record for the post like
+        // Create a record for the recipe like
         $recipeLike = new RecipeLike();
         $recipeLike->idUser = $user->idUser;
         $recipeLike->idRecipe = $idRecipe;
@@ -121,7 +123,7 @@ class RecipeController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Post liked successfully',
+            'message' => 'Recipe liked successfully',
             'like' => true
         ]);
     }

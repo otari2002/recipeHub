@@ -51,17 +51,17 @@ Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     Route::get('email/send', [EmailVerificationController::class, 'sendOTP']);
     Route::post('email/verify', [EmailVerificationController::class, 'verify']); //(code)
 
-    Route::post('posts/save', [RecipeController::class, 'savePost']);
-    // Remove a post from saved posts (idPost)
-    Route::post('posts/unsave', [RecipeController::class, 'unsavePost']);
-    // Like a post (idPost)
-    Route::post('posts/like', [RecipeController::class, 'likePost']);
-    // Get Post with its ID
-    Route::post('post', [RecipeController::class, 'getPost']);
-    // Remove Like from a post (idPost)
-    // Route::post('posts/unlike', [RecipeController::class, 'unlikePost']);
+    Route::post('recipes/save', [RecipeController::class, 'saveRecipe']);
+    // Remove a recipefrom saved recipes (idRecipe)
+    Route::post('recipes/unsave', [RecipeController::class, 'unsaveRecipe']);
+    // Like a recipe(idRecipe)
+    Route::post('recipes/like', [RecipeController::class, 'likeRecipe']);
+    // Get Recipe with its ID
+    Route::post('post', [RecipeController::class, 'getRecipe']);
+    // Remove Like from a recipe(idRecipe)
+    // Route::post('recipes/unlike', [RecipeController::class, 'unlikeRecipe']);
 
-    // Create a comment (idPost, idParent?, commentText)
+    // Create a comment (idRecipe, idParent?, commentText)
     Route::post('comments/create', [CommentController::class, 'createComment']);
     // Delete a comment (idComment)
     Route::post('comments/delete', [CommentController::class, 'deleteComment']);

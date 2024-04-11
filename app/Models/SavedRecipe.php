@@ -10,7 +10,7 @@ use Thiagoprz\CompositeKey\HasCompositeKey;
 class SavedRecipe extends Model
 {
     use HasFactory, HasCompositeKey;
-    protected $primaryKey = ['idPost', 'idUser'];
+    protected $primaryKey = ['idRecipe', 'idUser'];
     public $incrementing = false;
     protected $hidden = ['idUser'];
 

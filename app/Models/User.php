@@ -30,9 +30,9 @@ class User extends Authenticatable implements JWTSubject
         return static::where('request_delete_at', '<=', now()->subDays(2));
     }
 
-    public function savedPosts()
+    public function savedRecipes()
     {
-        return $this->hasMany(SavedPost::class, 'idUser', 'idUser');
+        return $this->hasMany(SavedRecipe::class, 'idUser', 'idUser');
     }
 
     public function getJWTIdentifier()

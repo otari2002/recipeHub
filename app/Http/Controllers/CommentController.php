@@ -62,8 +62,6 @@ class CommentController extends Controller
             'message' => 'Comment does not exist'
         ]);
 
-        $idPost = $comment->idPost;
-
         // Check if comment belongs to user
         if ($comment) {
             $comment->delete();

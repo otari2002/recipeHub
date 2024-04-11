@@ -9,7 +9,7 @@ use Thiagoprz\CompositeKey\HasCompositeKey;
 class RecipeLike extends Model
 {
     use HasFactory, HasCompositeKey;
-    protected $primaryKey = ['idUser', 'idPost'];
+    protected $primaryKey = ['idUser', 'idRecipe'];
     public $incrementing = false;
     protected $hidden = ['idUser'];
 
