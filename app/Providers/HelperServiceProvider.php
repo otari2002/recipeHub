@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Providers;
+
+use App\Helpers\RecipeAPI;
+use Illuminate\Support\ServiceProvider;
+
+class HelperServiceProvider extends ServiceProvider
+{
+    /**
+     * Register services.
+     */
+    public function register(): void
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     */
+    public function boot(): void
+    {
+        RecipeAPI::init();
+    }
+}

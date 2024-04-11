@@ -13,15 +13,10 @@ use Illuminate\Support\Facades\Validator;
 class RecipeController extends Controller
 {
     public function getRecipe($id){
-        $recipe = Http::get('https://api.spoonacular.com/recipes/'.$id.'/information', 
-        []);
-        return response()->json([
-            'recipe' => $recipe
-        ]);
+        return RecipeAPI::getRecipe($id);
     }
     public function getRandomRecipes(){
-        $recipes = RecipeAPI::randomRecipes(1);
-        return $recipes;
+        return RecipeAPI::randomRecipes(1);
     }
     public function savePost(Request $request)
     {
