@@ -18,8 +18,8 @@ class RecipeController extends Controller
     public function getRandomRecipes(){
         return RecipeAPI::randomRecipes(10);
     }
-    public function getSimilarRecipes($id){
-        return RecipeAPI::similarRecipes(10,$id);
+    public function getSimilarRecipes($id, $num=10){
+        return RecipeAPI::similarRecipes($num,$id);
     }
     public function saveRecipe(Request $request)
     {

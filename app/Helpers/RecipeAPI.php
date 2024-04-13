@@ -28,7 +28,7 @@ class RecipeAPI
         return json_decode($recipe);
     }
 
-    public static function similarRecipes($num=10, $id){
+    public static function similarRecipes($id, $num=10){
         $recipes = Http::withHeader('x-api-key',self::$apiKey)
         ->get('https://api.spoonacular.com/recipes/'.$id.'/similar',
         [

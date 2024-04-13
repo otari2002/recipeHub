@@ -40,6 +40,8 @@ Route::post('reset-password/confirm-otp', [ResetPasswordController::class, 'conf
 Route::post('reset-password', [ResetPasswordController::class, 'resetPassword']);
 
 Route::get('random-recipes', [RecipeController::class, 'getRandomRecipes']);
+Route::get('recipe/{id}', [RecipeController::class, 'getRecipe']);
+Route::get('similar-recipes/{id}', [RecipeController::class, 'getSimilarRecipes']);
 // Group of routes only available to logged in users
 Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     // Logout
@@ -61,7 +63,7 @@ Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     // Remove Like from a recipe(idRecipe)
     // Route::post('recipes/unlike', [RecipeController::class, 'unlikeRecipe']);
 
-    // Create a comment (idRecipe, idParent?, commentText)
+    // Create a comment (idRecipe, commentText)
     Route::post('comments/create', [CommentController::class, 'createComment']);
     // Delete a comment (idComment)
     Route::post('comments/delete', [CommentController::class, 'deleteComment']);
