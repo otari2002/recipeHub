@@ -1,0 +1,20 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: |
+          sshpass -p ${{ secrets.SSH_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SERVER_IP }} << EOF
+            cd /var/www/recipeHub
+            git pull origin main
+            composer install --no-dev --no-interaction --prefer-dist
+            exit
+          EOF
