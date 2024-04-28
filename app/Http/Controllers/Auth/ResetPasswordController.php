@@ -44,13 +44,6 @@ class ResetPasswordController extends Controller
             ]);
         }
 
-        if ($user->deleted) {
-            return response()->json([
-                "status" => "error",
-                "message" => "This account is in the process of deletion"
-            ]);
-        }
-
         // Send code to the user's email
         try{
             $user->notify(new PasswordResetMailNotification);
