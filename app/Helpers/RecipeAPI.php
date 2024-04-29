@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class RecipeAPI
 {
@@ -43,7 +44,7 @@ class RecipeAPI
             ->get('https://api.spoonacular.com/recipes/'.$id.'/information');
             $data = json_decode($recipe, true);
             return self::dataExtract($data);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Could not get recipe from API'
@@ -51,9 +52,57 @@ class RecipeAPI
         }
     }
 
+    public static function recipesByType($type, $page, $num = 10, $try=1){
+        try {
+            if($try > 2){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Could not get recipes from API after 3 tries'
+                ]);
+            }
+            $offset = ($page - 1) * $num;
+            $recipes = Http::withHeader('x-api-key',self::$apiKey)
+            ->get('https://api.spoonacular.com/recipes/complexSearch',
+            [
+                'limitLicense' => true,
+                'number' => $num,
+                'offset' => $offset,
+                'type' => $type
+            ]);
+            $data = json_decode($recipes, true);
+            return $data['results'];
+        } catch (Throwable $th) {
+            return self::recipesByType($type,$page,$num,$try+1);
+        }
+    }
+
+    public static function recipesByName($name, $page, $num = 10, $try=1){
+        try {
+            if($try > 2){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Could not get recipes from API after 3 tries'
+                ]);
+            }
+            $offset = ($page - 1) * $num;
+            $recipes = Http::withHeader('x-api-key',self::$apiKey)
+            ->get('https://api.spoonacular.com/recipes/complexSearch',
+            [
+                'limitLicense' => true,
+                'number' => $num,
+                'offset' => $offset,
+                'query' => $name
+            ]);
+            $data = json_decode($recipes, true);
+            return $data['results'];
+        } catch (Throwable $th) {
+            return self::recipesByType($name,$page,$num,$try+1);
+        }
+    }
+
     public static function randomRecipes($num, $try=1){
         try {
-            if($try > 3){
+            if($try > 2){
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Could not get recipes from API after 3 tries'
@@ -72,7 +121,7 @@ class RecipeAPI
                 $recipes[] = $extractedData;
             }
             return $recipes;
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return self::randomRecipes($num, $try+1);
         }
         
@@ -80,7 +129,7 @@ class RecipeAPI
 
     public static function similarRecipes($id, $num, $try=1){
         try {
-            if($try > 3){
+            if($try > 2){
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Could not get similar recipes from API after 3 tries'
@@ -93,7 +142,7 @@ class RecipeAPI
                 'number' => $num
             ]);
             return json_decode($recipes);
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return self::similarRecipes($id, $num, $try+1);
         }
         

@@ -22,6 +22,18 @@ class RecipeController extends Controller
         $num = intval($request->query('num', 10));
         return RecipeAPI::similarRecipes($id,$num);
     }
+    public function getRecipesByType(Request $request){
+        $page = intval($request->query('page', 1));
+        $num = intval($request->query('num', 10));
+        $type = $request->query('type', 'main course');
+        return RecipeAPI::recipesByType($type,$page,$num);
+    }
+    public function getRecipesByName(Request $request){
+        $page = intval($request->query('page', 1));
+        $num = intval($request->query('num', 10));
+        $name = $request->query('name', '');
+        return RecipeAPI::recipesByName($name,$page,$num);
+    }
     public function saveRecipe(Request $request)
     {
         $user = Auth::user();

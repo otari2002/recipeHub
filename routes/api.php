@@ -42,6 +42,9 @@ Route::post('reset-password', [ResetPasswordController::class, 'resetPassword'])
 Route::get('random-recipes', [RecipeController::class, 'getRandomRecipes']);
 Route::get('recipe/{id}', [RecipeController::class, 'getRecipe']);
 Route::get('similar-recipes/{id}', [RecipeController::class, 'getSimilarRecipes']);
+Route::get('recipe-search', [RecipeController::class, 'getRecipesByName']);
+Route::get('recipes-by-type', [RecipeController::class, 'getRecipesByType']);
+
 // Group of routes only available to logged in users
 Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     // Logout
