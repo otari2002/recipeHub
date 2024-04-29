@@ -115,12 +115,12 @@ class ResetPasswordController extends Controller
 
     // Function to confirm otp and reset the password
     public function resetPassword(Request $request){
-        $formFields = $request->only('code', 'email', 'password', 'password_confirmation');
+        $formFields = $request->only('code', 'email', 'password');
         // Validate the data sent in the body of the request
         $validator = Validator::make($formFields, [
             'code' => ['required', 'numeric', 'digits:6'],
             'email' => 'email',
-            'password' => 'required|confirmed'
+            'password' => 'required'
         ]);
         if($validator->fails()){
             return response()->json([
