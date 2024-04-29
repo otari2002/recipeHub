@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Helpers\RecipeAPI;
 use App\Models\RecipeLike;
-use Illuminate\Support\Facades\Http;
 use App\Models\SavedRecipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,11 +14,13 @@ class RecipeController extends Controller
     public function getRecipe($id){
         return RecipeAPI::getRecipe($id);
     }
-    public function getRandomRecipes(){
-        return RecipeAPI::randomRecipes(10);
+    public function getRandomRecipes(Request $request){
+        $num = intval($request->query('num', 10));
+        return RecipeAPI::randomRecipes($num);
     }
-    public function getSimilarRecipes($id, $num=10){
-        return RecipeAPI::similarRecipes($num,$id);
+    public function getSimilarRecipes($id, Request $request){
+        $num = intval($request->query('num', 10));
+        return RecipeAPI::similarRecipes($id,$num);
     }
     public function saveRecipe(Request $request)
     {
@@ -39,7 +40,11 @@ class RecipeController extends Controller
 
         // Check if recipe was already saved
         if ($recipeSaved) {
-            return $this->unsaveRecipe($request);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Recipe already saved by user',
+                'saved' => true
+            ]);
         }
 
         // Create a record for saved recipe
