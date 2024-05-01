@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\EmailVerificationController;
+use App\Http\Controllers\UploadImageController;
 
 // Register Login (fullName, username?, email, password)
 Route::post('register', [RegisterController::class, 'register']);
@@ -45,6 +46,7 @@ Route::get('similar-recipes/{id}', [RecipeController::class, 'getSimilarRecipes'
 Route::get('recipe-search', [RecipeController::class, 'getRecipesByName']);
 Route::get('recipes-by-type', [RecipeController::class, 'getRecipesByType']);
 
+Route::post('image-text', [UploadImageController::class, 'upload']);
 // Group of routes only available to logged in users
 Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     // Logout

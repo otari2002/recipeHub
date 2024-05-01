@@ -11,6 +11,7 @@
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.9",
         "php-open-source-saver/jwt-auth": "^2.2",
+        "thiagoalessio/tesseract_ocr": "^2.13",
         "thiagoprz/eloquent-composite-key": "^1.0"
     },
     "require-dev": {
