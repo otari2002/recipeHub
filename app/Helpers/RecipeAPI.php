@@ -57,20 +57,27 @@ class RecipeAPI
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 3 tries'
+                    'message' => 'Could not get recipes from API after 2 tries'
                 ]);
             }
             $offset = ($page - 1) * $num;
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
             ->get('https://api.spoonacular.com/recipes/complexSearch',
             [
-                'limitLicense' => true,
+                'addRecipeInformation' => "true",
+                'fillIngredients' => "true",
+                'limitLicense' => "true",
                 'number' => $num,
                 'offset' => $offset,
-                'type' => $type
+                'type' => $type,
             ]);
             $data = json_decode($recipes, true);
-            return $data['results'];
+            $recipes = [];
+            foreach ($data['results'] as $recipe) {
+                $extractedData = self::dataExtract($recipe);
+                $recipes[] = $extractedData;
+            }
+            return $recipes;
         } catch (Throwable $th) {
             return self::recipesByType($type,$page,$num,$try+1);
         }
@@ -81,14 +88,14 @@ class RecipeAPI
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 3 tries'
+                    'message' => 'Could not get recipes from API after 2 tries'
                 ]);
             }
             $offset = ($page - 1) * $num;
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
             ->get('https://api.spoonacular.com/recipes/complexSearch',
             [
-                'limitLicense' => true,
+                'limitLicense' => "true",
                 'number' => $num,
                 'offset' => $offset,
                 'query' => $name
@@ -105,13 +112,13 @@ class RecipeAPI
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 3 tries'
+                    'message' => 'Could not get recipes from API after 2 tries'
                 ]);
             }
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
             ->get('https://api.spoonacular.com/recipes/random',
             [
-                'limitLicense' => true,
+                'limitLicense' => "true",
                 'number' => $num
             ]);
             $data = json_decode($recipes, true);
@@ -132,13 +139,13 @@ class RecipeAPI
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get similar recipes from API after 3 tries'
+                    'message' => 'Could not get similar recipes from API after 2 tries'
                 ]);
             }
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
             ->get('https://api.spoonacular.com/recipes/'.$id.'/similar',
             [
-                'limitLicense' => true,
+                'limitLicense' => "true",
                 'number' => $num
             ]);
             return json_decode($recipes);
