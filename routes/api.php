@@ -52,7 +52,7 @@ Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     Route::get('me', [UserController::class, 'getCurrentUser']);
 
     // Get current user's saved recipes
-    Route::get('saved-recipes', [UserController::class, 'getSavedRecipes']);
+    Route::get('saved-recipes', [RecipeController::class, 'getSavedRecipes']);
     // Change personnal data (fullName?, username?, email?)
     Route::post('changePersonnalData', [UserController::class, 'changePersonnalData']);
 

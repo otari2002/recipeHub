@@ -19,9 +19,13 @@ class RecipeAPI
         return SavedRecipe::where(['idRecipe' => $idRecipe, 'idUser' => $idUser])->first();
     }
 
-    private static function dataExtract($data){
+    private static function dataExtract($data, $isSaved = false){
         $id = $data['id'];
-        $saved = self::isRecipeSaved($id);
+        if($isSaved){
+            $saved = true;
+        }else{
+            $saved = self::isRecipeSaved($id);
+        }
         $name = $data['title'];
         $img = $data['image'];
         $time = $data['readyInMinutes'];
@@ -60,6 +64,35 @@ class RecipeAPI
                 'message' => 'Could not get recipe from API',
                 'error' => $th->getMessage() ?? 'Unknown error'
             ]);
+        }
+    }
+
+    public static function getRecipesBulk($ids, $isSaved=false, $try=1, $th=null){
+        try {
+            if($try > 2){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Could not get recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
+                ]);
+            }
+            $recipes = Http::withHeader('x-api-key',self::$apiKey)
+            ->get('https://api.spoonacular.com/recipes/informationBulk',
+            [
+                'ids' => $ids,
+                'addRecipeInformation' => "true",
+                'fillIngredients' => "true",
+                'limitLicense' => "true",
+            ]);
+            $data = json_decode($recipes, true);
+            $recipes = [];
+            foreach ($data as $recipe) {
+                $extractedData = self::dataExtract($recipe, $isSaved);
+                $recipes[] = $extractedData;
+            }
+            return $recipes;
+        } catch (Throwable $th) {
+            return self::getRecipesBulk($ids, $isSaved, $try+1, $th);
         }
     }
 

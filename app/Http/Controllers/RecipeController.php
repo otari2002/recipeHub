@@ -11,6 +11,13 @@ use Illuminate\Support\Facades\Validator;
 
 class RecipeController extends Controller
 {
+    // Get current user's saved recipes
+    public function getSavedRecipes()
+    {
+        $user = Auth::user();
+        $ids = $user->savedRecipes->pluck('idRecipe')->implode(',');
+        return RecipeAPI::getRecipesBulk($ids, true);
+    }
     public function getRecipe($id){
         return RecipeAPI::getRecipe($id);
     }

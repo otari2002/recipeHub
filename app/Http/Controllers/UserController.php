@@ -146,12 +146,4 @@ class UserController extends Controller
         return $this->getUser($user->uuid);
     }
 
-    // Get current user's saved recipes
-    public function getSavedRecipes()
-    {
-        $user = Auth::user();
-        $recipes = $user->savedRecipes;
-        return $recipes;
-    }
-
 }
