@@ -36,13 +36,13 @@ class LoginController extends Controller
         $credentials = $request->only($key, 'password');
 
         // Check if user logged in via a provider
-        $socialLogin = User::where($key, $credentials[$key])->where('provider', '<>', null)->first();
-        if($socialLogin){
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User with '.$key.' ('.$credentials[$key].') has registered via '.$socialLogin->provider
-            ]);
-        }
+        // $socialLogin = User::where($key, $credentials[$key])->where('provider', '<>', null)->first();
+        // if($socialLogin){
+        //     return response()->json([
+        //         'status' => 'error',
+        //         'message' => 'User with '.$key.' ('.$credentials[$key].') has registered via '.$socialLogin->provider
+        //     ]);
+        // }
 
         // Verify credentials
         $token = Auth::attempt($credentials);

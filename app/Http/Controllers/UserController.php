@@ -35,7 +35,6 @@ class UserController extends Controller
         $message = '';
         // Delete all OTPs related to current email
         if ($request->has('email') && $formFields['email'] != null) {
-            LoginOtp::where('email', $user->email)->delete();
             PasswordOtp::where('email', $user->email)->delete();
             EmailOtp::where('email', $user->email)->delete();
         }
