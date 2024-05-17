@@ -14,6 +14,7 @@ class RecipeAPI
     }
 
     private static function dataExtract($data){
+        $id = $data['id'];
         $name = $data['title'];
         $img = $data['image'];
         $time = $data['readyInMinutes'];
@@ -29,6 +30,7 @@ class RecipeAPI
         }
 
         $extractedData = [
+            'id' => $id,
             'name' => $name,
             'img' => $img,
             'time' => $time,
@@ -103,7 +105,7 @@ class RecipeAPI
             $data = json_decode($recipes, true);
             return $data['results'];
         } catch (Throwable $th) {
-            return self::recipesByType($name,$page,$num,$try+1);
+            return self::recipesByName($name,$page,$num,$try+1);
         }
     }
 
