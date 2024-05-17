@@ -5,11 +5,8 @@ use App\Http\Middleware\EnsureUserLoggedIn;
 
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LoginOtpController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\UploadImageController;

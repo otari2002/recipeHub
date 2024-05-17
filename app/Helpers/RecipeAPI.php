@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\SavedRecipe;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Throwable;
 
@@ -12,9 +14,14 @@ class RecipeAPI
     {
         self::$apiKey = env('SPOONACULAR_API', '');
     }
+    private static function isRecipeSaved($idRecipe){
+        $idUser = Auth::user()->idUser;
+        return SavedRecipe::where(['idRecipe' => $idRecipe, 'idUser' => $idUser])->first();
+    }
 
     private static function dataExtract($data){
         $id = $data['id'];
+        $saved = self::isRecipeSaved($id);
         $name = $data['title'];
         $img = $data['image'];
         $time = $data['readyInMinutes'];
@@ -31,6 +38,7 @@ class RecipeAPI
 
         $extractedData = [
             'id' => $id,
+            'saved' => $saved ? true : false,
             'name' => $name,
             'img' => $img,
             'time' => $time,
@@ -49,17 +57,19 @@ class RecipeAPI
         } catch (Throwable $th) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Could not get recipe from API'
+                'message' => 'Could not get recipe from API',
+                'error' => $th->getMessage() ?? 'Unknown error'
             ]);
         }
     }
 
-    public static function recipesByType($type, $page, $num = 10, $try=1){
+    public static function recipesByType($type, $page, $num = 10, $try=1, $th=null){
         try {
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 2 tries'
+                    'message' => 'Could not get recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
                 ]);
             }
             $offset = ($page - 1) * $num;
@@ -81,16 +91,17 @@ class RecipeAPI
             }
             return $recipes;
         } catch (Throwable $th) {
-            return self::recipesByType($type,$page,$num,$try+1);
+            return self::recipesByType($type,$page,$num,$try+1, $th);
         }
     }
 
-    public static function recipesByName($name, $page, $num = 10, $try=1){
+    public static function recipesByName($name, $page, $num = 10, $try=1, $th=null){
         try {
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 2 tries'
+                    'message' => 'Could not get recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
                 ]);
             }
             $offset = ($page - 1) * $num;
@@ -112,16 +123,17 @@ class RecipeAPI
             }
             return $recipes;
         } catch (Throwable $th) {
-            return self::recipesByName($name,$page,$num,$try+1);
+            return self::recipesByName($name,$page,$num,$try+1, $th);
         }
     }
 
-    public static function randomRecipes($num, $try=1){
+    public static function randomRecipes($num, $try=1, $th=null){
         try {
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get recipes from API after 2 tries'
+                    'message' => 'Could not get recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
                 ]);
             }
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
@@ -138,17 +150,18 @@ class RecipeAPI
             }
             return $recipes;
         } catch (Throwable $th) {
-            return self::randomRecipes($num, $try+1);
+            return self::randomRecipes($num, $try+1, $th);
         }
         
     }
 
-    public static function similarRecipes($id, $num, $try=1){
+    public static function similarRecipes($id, $num, $try=1, $th=null){
         try {
             if($try > 2){
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Could not get similar recipes from API after 2 tries'
+                    'message' => 'Could not get similar recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
                 ]);
             }
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
@@ -159,7 +172,7 @@ class RecipeAPI
             ]);
             return json_decode($recipes);
         } catch (Throwable $th) {
-            return self::similarRecipes($id, $num, $try+1);
+            return self::similarRecipes($id, $num, $try+1, $th);
         }
         
     }
