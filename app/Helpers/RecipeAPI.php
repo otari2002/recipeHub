@@ -97,13 +97,20 @@ class RecipeAPI
             $recipes = Http::withHeader('x-api-key',self::$apiKey)
             ->get('https://api.spoonacular.com/recipes/complexSearch',
             [
+                'addRecipeInformation' => "true",
+                'fillIngredients' => "true",
                 'limitLicense' => "true",
                 'number' => $num,
                 'offset' => $offset,
                 'query' => $name
             ]);
             $data = json_decode($recipes, true);
-            return $data['results'];
+            $recipes = [];
+            foreach ($data['results'] as $recipe) {
+                $extractedData = self::dataExtract($recipe);
+                $recipes[] = $extractedData;
+            }
+            return $recipes;
         } catch (Throwable $th) {
             return self::recipesByName($name,$page,$num,$try+1);
         }
