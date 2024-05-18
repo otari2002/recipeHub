@@ -31,6 +31,7 @@ Route::get('recipe/{id}', [RecipeController::class, 'getRecipe']);
 Route::get('similar-recipes/{id}', [RecipeController::class, 'getSimilarRecipes']);
 Route::get('recipe-search', [RecipeController::class, 'getRecipesByName']);
 Route::get('recipes-by-type', [RecipeController::class, 'getRecipesByType']);
+Route::get('recipes-by-ingredients', [RecipeController::class, 'getRecipesByIngredients']);
 
 Route::post('image-text', [UploadImageController::class, 'upload']);
 // Group of routes only available to logged in users

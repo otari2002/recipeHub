@@ -128,6 +128,38 @@ class RecipeAPI
         }
     }
 
+    public static function recipesByIngredients($ingredients, $page, $num = 10, $try=1, $th=null){
+        try {
+            if($try > 2){
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Could not get recipes from API after 2 tries',
+                    'error' => $th->getMessage() ?? 'Unknown error'
+                ]);
+            }
+            $offset = ($page - 1) * $num;
+            $recipes = Http::withHeader('x-api-key',self::$apiKey)
+            ->get('https://api.spoonacular.com/recipes/complexSearch',
+            [
+                'addRecipeInformation' => "true",
+                'fillIngredients' => "true",
+                'limitLicense' => "true",
+                'number' => $num,
+                'offset' => $offset,
+                'includeIngredients' => $ingredients
+            ]);
+            $data = json_decode($recipes, true);
+            $recipes = [];
+            foreach ($data['results'] as $recipe) {
+                $extractedData = self::dataExtract($recipe);
+                $recipes[] = $extractedData;
+            }
+            return $recipes;
+        } catch (Throwable $th) {
+            return self::recipesByIngredients($ingredients,$page,$num,$try+1, $th);
+        }
+    }
+
     public static function recipesByName($name, $page, $num = 10, $try=1, $th=null){
         try {
             if($try > 2){
