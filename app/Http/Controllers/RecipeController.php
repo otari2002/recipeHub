@@ -15,7 +15,7 @@ class RecipeController extends Controller
     public function getSavedRecipes()
     {
         $user = Auth::user();
-        $ids = $user->savedRecipes->pluck('idRecipe')->implode(',');
+        $ids = $user->savedRecipes->sortByDesc('created_at')->pluck('idRecipe')->implode(',');
         return RecipeAPI::getRecipesBulk($ids, true);
     }
     public function getRecipe($id){
