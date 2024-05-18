@@ -13,7 +13,6 @@ use App\Http\Controllers\UploadImageController;
 
 // Register Login (fullName, username?, email, password)
 Route::post('register', [RegisterController::class, 'register']);
-Route::get('test', [RegisterController::class, 'index']);
 
 // User Login (email, password)
 Route::post('login', [LoginController::class, 'login']);
@@ -34,12 +33,14 @@ Route::get('recipes-by-type', [RecipeController::class, 'getRecipesByType']);
 Route::get('recipes-by-ingredients', [RecipeController::class, 'getRecipesByIngredients']);
 
 Route::post('image-text', [UploadImageController::class, 'upload']);
+
+// User Token Refresh
+Route::post('refresh', [LoginController::class, 'refresh']);
+
 // Group of routes only available to logged in users
 Route::middleware([EnsureUserLoggedIn::class])->group(function () {
     // Logout
     Route::get('logout', [LoginController::class, 'logout']);
-    // User Token Refresh
-    Route::get('refresh', [LoginController::class, 'refresh']);
 
     // Email Adress Verification
     Route::get('email/send', [EmailVerificationController::class, 'sendOTP']);

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('provider', ['Google', 'Apple', 'Facebook'])->nullable();
             $table->string('password', 100)->nullable();
             $table->boolean('email_verified')->default(false);
+            $table->string('refresh_token', 100)->nullable();
             $table->timestamps();
         });
     }

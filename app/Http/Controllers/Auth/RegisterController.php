@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {   
@@ -70,11 +71,14 @@ class RegisterController extends Controller
         $formFields["uuid"] = (string) \Illuminate\Support\Str::uuid();
         $user = User::create($formFields);
         $token = Auth::login($user);
+        $refreshToken = Str::random(60);
+        User::where('idUser', $user->idUser)->update(['refresh_token' => $refreshToken]);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Register Successful',
             'token' => $token,
+            'refresh_token' => $refreshToken,
             'user' => $user
         ]);
     }
