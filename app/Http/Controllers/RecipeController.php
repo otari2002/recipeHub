@@ -39,7 +39,7 @@ class RecipeController extends Controller
         $page = intval($request->query('page', 1));
         $num = intval($request->query('num', 10));
         $ingredients = $request->query('ingredients', '');
-        return RecipeAPI::recipesByType($ingredients,$page,$num);
+        return RecipeAPI::recipesByIngredients($ingredients,$page,$num);
     }
     public function getRecipesByName(Request $request){
         $page = intval($request->query('page', 1));
