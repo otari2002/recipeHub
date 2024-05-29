@@ -154,7 +154,7 @@ class RecipeAPI
                 $extractedData = self::dataExtract($recipe);
                 $recipes[] = $extractedData;
             }
-            return [$ingredients,$recipes];
+            return $ingredients;
         } catch (Throwable $th) {
             return self::recipesByIngredients($ingredients,$page,$num,$try+1, $th);
         }
