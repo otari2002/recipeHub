@@ -32,7 +32,7 @@ Route::get('recipe-search', [RecipeController::class, 'getRecipesByName']);
 Route::get('recipes-by-type', [RecipeController::class, 'getRecipesByType']);
 Route::get('recipes-by-ingredients', [RecipeController::class, 'getRecipesByIngredients']);
 
-Route::post('image-text', [UploadImageController::class, 'upload']);
+// Route::post('image-text', [UploadImageController::class, 'upload']);
 
 // User Token Refresh
 Route::post('refresh', [LoginController::class, 'refresh']);
